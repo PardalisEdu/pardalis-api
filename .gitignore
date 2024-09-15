@@ -1,0 +1,11 @@
+.env
+bin
+tmp
+
+# Base de datos SQLite
+*.sqlite3
+
+# Certificados
+*.cnf
+*.crt
+*.key
