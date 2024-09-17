@@ -121,6 +121,26 @@ func (h *Handler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenString := utils.GetTokenFromRequest(r)
+	if tokenString == "" {
+		utils.WriteError(w, http.StatusUnauthorized, fmt.Errorf("missing or invalid token"))
+		return
+	}
+
+	secret := []byte(configs.Envs.JWTSecret)
+	claims, err := auth.VerifyJWT(tokenString, secret)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("error verifying token: %v", err))
+		return
+	}
+
+	// Verificar si el apodo en el token coincide con el userApodo de la solicitud
+	tokenApodo, ok := claims["apodo"].(string)
+	if !ok || tokenApodo != userApodo {
+		utils.WriteError(w, http.StatusForbidden, fmt.Errorf("you are not authorized to view this user's information"))
+		return
+	}
+
 	user, err := h.store.GetUserByApodo(userApodo)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)

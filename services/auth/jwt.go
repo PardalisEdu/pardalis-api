@@ -101,3 +101,33 @@ func GetuserApodoFromContext(ctx context.Context) int {
 
 	return userApodo
 }
+
+// VerifyJWT 🐄 – Esta función es el detective que revisa si el token JWT es válido o no. Si es válido,
+// regresa los claims del token. Si no, regresa un error porque la autenticación ha fallado. 🔒
+func VerifyJWT(tokenString string, secret []byte) (jwt.MapClaims, error) {
+	// Definimos la función de verificación para obtener los claims del token
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Verificar que el método de firma sea HMAC
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return secret, nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("error parsing token: %v", err)
+	}
+
+	// Si el token es válido y tiene los claims, los extraemos
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		// Verificamos la expiración del token
+		if exp, ok := claims["exp"].(float64); ok {
+			if time.Unix(int64(exp), 0).Before(time.Now()) {
+				return nil, fmt.Errorf("token has expired")
+			}
+		}
+		return claims, nil
+	}
+
+	return nil, fmt.Errorf("invalid token")
+}
