@@ -9,3 +9,10 @@ tmp
 *.cnf
 *.crt
 *.key
+
+# test
+*.http
+client.go
+
+# editor
+.idea
