@@ -16,18 +16,21 @@ import (
 func main() {
 
 	// Intentamos crear una conexión a la base de datos SQLite. Si esto falla, es probable que tu vida de desarrollador también falle. 😱
-	db, err := db.NewSQLiteStorage("./pardalis.sqlite3")
+	mySQLStorage, err := db.NewMySQLStorage()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer mySQLStorage.Close()
 
-	// Inicializamos el almacenamiento. Porque, claro, necesitas hacer más que solo conectar, ¿verdad? 🤔
-	initStorage(db)
+	// Inicializamos las tablas de la base de datos
+	if err := db.InitializeDatabase(mySQLStorage); err != nil {
+		log.Fatal(err)
+	}
 
-	// Creamos el servidor API con la grandiosa idea de que alguien realmente lo usará. 🚀
-	server := api.NewAPIServer(fmt.Sprintf(":%s", configs.Envs.Port), db)
+	// Creamos el servidor API
+	server := api.NewAPIServer(fmt.Sprintf(":%s", configs.Envs.Port), mySQLStorage)
 
-	// Intentamos iniciar el servidor. Si no funciona, al menos hicimos todo lo posible, ¿no? 🤷‍♂️
+	// Iniciamos el servidor
 	if err := server.Start(); err != nil {
 		log.Fatal(err)
 	}
