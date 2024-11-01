@@ -65,7 +65,10 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
+	err = utils.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
+	if err != nil {
+		return
+	}
 }
 
 // handleRegister 🐄 – El héroe del registro. Aquí registramos a un nuevo usuario, comprobamos si ya existe,
@@ -108,7 +111,10 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusCreated, nil)
+	err = utils.WriteJSON(w, http.StatusCreated, nil)
+	if err != nil {
+		return
+	}
 }
 
 // handleGetUser 🐄 – El guardián de la información del usuario. Aquí obtenemos los detalles de un usuario
@@ -134,8 +140,7 @@ func (h *Handler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Verificar si el apodo en el token coincide con el userApodo de la solicitud
-	tokenApodo, ok := claims["apodo"].(string)
+	tokenApodo, ok := claims["userApodo"].(string)
 	if !ok || tokenApodo != userApodo {
 		utils.WriteError(w, http.StatusForbidden, fmt.Errorf("you are not authorized to view this user's information"))
 		return
@@ -147,5 +152,10 @@ func (h *Handler) handleGetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.WriteJSON(w, http.StatusOK, user)
+	// Convertir a la estructura de respuesta antes de enviar
+	response := user.ToResponse()
+	err = utils.WriteJSON(w, http.StatusOK, response)
+	if err != nil {
+		return
+	}
 }
