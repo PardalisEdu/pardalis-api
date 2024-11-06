@@ -27,9 +27,9 @@ func NewHandler(store types.UserStore) *Handler {
 // RegisterRoutes 🐄 – El gran registrador de rutas. Aquí es donde se configuran las rutas para el manejo de
 // usuarios, porque el enrutamiento es una tarea que alguien tiene que hacer. 🚦
 func (h *Handler) RegisterRoutes(router *mux.Router) {
-	router.HandleFunc("/login", h.handleLogin).Methods("POST")
-	router.HandleFunc("/register", h.handleRegister).Methods("POST")
-	router.HandleFunc("/users/{userApodo}", auth.WithJWTAuth(h.handleGetUser, h.store)).Methods(http.MethodGet)
+	router.HandleFunc("/login", h.handleLogin).Methods(http.MethodPost, http.MethodOptions)
+	router.HandleFunc("/register", h.handleRegister).Methods(http.MethodPost, http.MethodOptions)
+	router.HandleFunc("/users/{userApodo}", auth.WithJWTAuth(h.handleGetUser, h.store)).Methods(http.MethodGet, http.MethodOptions)
 }
 
 // handleLogin 🐄 – El mago del inicio de sesión. Aquí es donde intentamos iniciar sesión, verificar

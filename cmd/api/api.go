@@ -41,6 +41,8 @@ func (s *APIServer) Start() error {
 	// Creamos un nuevo enrutador que manejará todas las rutas. 🚗
 	router := mux.NewRouter()
 
+	corsConfig := middleware.DefaultCorsConfig()
+	router.Use(middleware.CORS(corsConfig))
 	router.Use(s.rateLimiter.Middleware)
 
 	// Creamos un subrouter específico para nuestra API versión 1. ¿Por qué? Bueno, porque "versionado" suena profesional. 📚
