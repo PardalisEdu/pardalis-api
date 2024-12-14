@@ -1,4 +1,4 @@
-module codeberg.org/Pardalis/pardalis-api
+module gitlab.com/pardalis/pardalis-api
 
 go 1.23.0
 

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"codeberg.org/Pardalis/pardalis-api/configs"
-	"codeberg.org/Pardalis/pardalis-api/services/auth"
-	"codeberg.org/Pardalis/pardalis-api/types"
-	"codeberg.org/Pardalis/pardalis-api/utils"
+	"gitlab.com/pardalis/pardalis-api/configs"
+	"gitlab.com/pardalis/pardalis-api/services/auth"
+	"gitlab.com/pardalis/pardalis-api/types"
+	"gitlab.com/pardalis/pardalis-api/utils"
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 )

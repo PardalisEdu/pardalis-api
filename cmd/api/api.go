@@ -4,13 +4,13 @@ package api
 
 // Porque sin una base de datos, ¿qué sería de nuestra vida?
 import (
-	"codeberg.org/Pardalis/pardalis-api/middleware"
+	"gitlab.com/pardalis/pardalis-api/middleware"
 	"database/sql"
 	"log"
 	"net/http"
 	"time"
 
-	"codeberg.org/Pardalis/pardalis-api/services/user"
+	"gitlab.com/pardalis/pardalis-api/services/user"
 	"github.com/gorilla/mux"
 )
 

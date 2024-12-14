@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"codeberg.org/Pardalis/pardalis-api/configs"
+	"gitlab.com/pardalis/pardalis-api/configs"
 	"testing"
 	"time"
 )

@@ -35,7 +35,7 @@ Pardalis Backend es el motor que hace posible que los estudiantes aprendan ingl√
 
 1. Clone el repositorio:
 ```bash
-git clone https://codeberg.org/Pardalis/pardalis-api.git
+git clone https://gitlab.com/pardalis/pardalis-api.git
 cd pardalis-api
 ```
 

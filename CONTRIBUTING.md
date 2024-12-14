@@ -28,7 +28,7 @@ cd pardalis-api
 
 3. Añadir el repositorio upstream:
 ```bash
-git remote add upstream https://codeberg.org/Pardalis/pardalis-api.git
+git remote add upstream https://gitlab.com/pardalis/pardalis-api.git
 ```
 
 4. Instalar dependencias:

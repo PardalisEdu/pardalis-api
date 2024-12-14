@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 
-	"codeberg.org/Pardalis/pardalis-api/cmd/api"
-	"codeberg.org/Pardalis/pardalis-api/configs"
-	"codeberg.org/Pardalis/pardalis-api/db"
+	"gitlab.com/pardalis/pardalis-api/cmd/api"
+	"gitlab.com/pardalis/pardalis-api/configs"
+	"gitlab.com/pardalis/pardalis-api/db"
 )
 
 // main 🐄 – El punto de entrada donde todo comienza y nada funciona como debería.

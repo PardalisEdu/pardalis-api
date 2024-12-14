@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"codeberg.org/Pardalis/pardalis-api/configs"
+	"gitlab.com/pardalis/pardalis-api/configs"
 	_ "github.com/go-sql-driver/mysql"
 )
 

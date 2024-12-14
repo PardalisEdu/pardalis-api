@@ -6,7 +6,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	"codeberg.org/Pardalis/pardalis-api/types"
+	"gitlab.com/pardalis/pardalis-api/types"
 )
 
 // Store 🐄 – El lugar donde mágicamente (o trágicamente) almacenamos nuestros usuarios.
