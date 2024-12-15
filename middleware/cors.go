@@ -3,6 +3,8 @@ package middleware
 import (
 	"net/http"
 	"strings"
+
+	"github.com/rs/cors"
 )
 
 // CorsConfig contiene la configuración para CORS
@@ -71,4 +73,25 @@ func CORS(config *CorsConfig) func(http.Handler) http.Handler {
 			next.ServeHTTP(w, r)
 		})
 	}
+}
+
+func NewCorsMiddleware() *cors.Cors {
+	return cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5173", "http://localhost:4173"}, // Orígenes permitidos
+		AllowedMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodPatch,
+			http.MethodDelete,
+			http.MethodOptions,
+		},
+		AllowedHeaders: []string{
+			"Authorization",
+			"Content-Type",
+			"X-Requested-With",
+		},
+		AllowCredentials: true,
+		Debug:            false, // Habilita logs de depuración
+	})
 }

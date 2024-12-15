@@ -5,11 +5,12 @@ package api
 // Porque sin una base de datos, ¿qué sería de nuestra vida?
 import (
 	"database/sql"
-	"gitlab.com/pardalis/pardalis-api/middleware"
-	"gitlab.com/pardalis/pardalis-api/services/personalization"
 	"log"
 	"net/http"
 	"time"
+
+	"gitlab.com/pardalis/pardalis-api/middleware"
+	"gitlab.com/pardalis/pardalis-api/services/personalization"
 
 	"github.com/gorilla/mux"
 	"gitlab.com/pardalis/pardalis-api/services/user"
@@ -42,8 +43,8 @@ func (s *APIServer) Start() error {
 	// Creamos un nuevo enrutador que manejará todas las rutas. 🚗
 	router := mux.NewRouter()
 
-	corsConfig := middleware.DefaultCorsConfig()
-	router.Use(middleware.CORS(corsConfig))
+	// Aplicar middleware CORS
+	corsMiddleware := middleware.NewCorsMiddleware()
 	router.Use(s.rateLimiter.Middleware)
 
 	// Creamos un subrouter específico para nuestra API versión 1. ¿Por qué? Bueno, porque "versionado" suena profesional. 📚
@@ -60,17 +61,18 @@ func (s *APIServer) Start() error {
 	userHandler.RegisterRoutes(subrouter)
 	personalizationHandler.RegisterRoutes(subrouter)
 
+	// Configurar el servidor con CORS
+	handler := corsMiddleware.Handler(router)
 	// El momento glorioso. Si llegamos hasta aquí sin explotar, el servidor está listo para atender las solicitudes. 🎉
 	log.Printf("Servidor iniciado en el puerto %s\n", s.addr)
 
 	server := &http.Server{
 		Addr: s.addr,
-		// Good practice to set timeouts to avoid Slowloris attacks.
+		// Good practice to set timeouts
 		WriteTimeout: time.Second * 15,
 		ReadTimeout:  time.Second * 15,
 		IdleTimeout:  time.Second * 60,
-
-		Handler: router, // Pass our instance of gorilla/mux in.
+		Handler:      handler, // Usar el handler con CORS
 	}
 
 	// Ahora le decimos a HTTP que se ponga cómodo y escuche en la dirección y puerto que hemos configurado.
