@@ -4,14 +4,15 @@ package api
 
 // Porque sin una base de datos, ¿qué sería de nuestra vida?
 import (
-	"gitlab.com/pardalis/pardalis-api/middleware"
 	"database/sql"
+	"gitlab.com/pardalis/pardalis-api/middleware"
+	"gitlab.com/pardalis/pardalis-api/services/personalization"
 	"log"
 	"net/http"
 	"time"
 
-	"gitlab.com/pardalis/pardalis-api/services/user"
 	"github.com/gorilla/mux"
+	"gitlab.com/pardalis/pardalis-api/services/user"
 )
 
 // APIServer 🐄 – El increíble servidor API que probablemente va a fallar
@@ -50,12 +51,14 @@ func (s *APIServer) Start() error {
 
 	// Iniciamos la tienda de usuarios, que no tiene nada que ver con Amazon. 🛒
 	userStore := user.NewStore(s.db)
-
+	personalizationStore := personalization.NewStore(s.db)
 	// Creamos el handler para los usuarios. Este será quien maneje todas esas solicitudes incómodas de registro. 🙇‍♂️
 	userHandler := user.NewHandler(userStore)
+	personalizationHandler := personalization.NewHandler(personalizationStore, userStore)
 
 	// Registramos todas las rutas relacionadas con usuarios, para que el subrouter pueda manejarlas como el ninja que es. 🥷
 	userHandler.RegisterRoutes(subrouter)
+	personalizationHandler.RegisterRoutes(subrouter)
 
 	// El momento glorioso. Si llegamos hasta aquí sin explotar, el servidor está listo para atender las solicitudes. 🎉
 	log.Printf("Servidor iniciado en el puerto %s\n", s.addr)
