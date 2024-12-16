@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/rs/cors"
@@ -77,7 +78,7 @@ func CORS(config *CorsConfig) func(http.Handler) http.Handler {
 
 func NewCorsMiddleware() *cors.Cors {
 	return cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173", "http://localhost:4173", "http://localhost:3000"}, // Orígenes permitidos
+		AllowedOrigins: getAllowedOrigins(),
 		AllowedMethods: []string{
 			http.MethodGet,
 			http.MethodPost,
@@ -92,6 +93,32 @@ func NewCorsMiddleware() *cors.Cors {
 			"X-Requested-With",
 		},
 		AllowCredentials: true,
-		Debug:            false, // Habilita logs de depuración
+		Debug:            os.Getenv("ENV") == "development",
+		MaxAge:           300,
 	})
+}
+
+func getAllowedOrigins() []string {
+	env := os.Getenv("ENV")
+	switch env {
+	case "production":
+		return []string{
+			"https://pardalis.mx",
+			"https://www.pardalis.mx",
+		}
+	case "staging":
+		return []string{
+			"https://staging.pardalis.mx",
+		}
+	default:
+		return []string{
+			"http://localhost:3000",
+			"https://localhost:3000",
+			"http://127.0.0.1:3000",
+			"http://localhost:5173",
+			"http://127.0.0.1:5173",
+			"http://localhost:4173",
+			"http://127.0.0.1:4173",
+		}
+	}
 }
