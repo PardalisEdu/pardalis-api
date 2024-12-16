@@ -4,24 +4,28 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/mux"
 	"gitlab.com/pardalis/pardalis-api/configs"
 	"gitlab.com/pardalis/pardalis-api/services/auth"
 	"gitlab.com/pardalis/pardalis-api/types"
 	"gitlab.com/pardalis/pardalis-api/utils"
-	"github.com/go-playground/validator/v10"
-	"github.com/gorilla/mux"
 )
 
 // Handler 🐄 – El valiente guardián de nuestras rutas de usuario. Está aquí para manejar las solicitudes
 // de registro, inicio de sesión y obtención de usuario. Sí, porque solo él puede salvarnos de la confusión. 🌟
 type Handler struct {
-	store types.UserStore
+	store     types.UserStore
+	userStore types.UserStore // En este caso es el mismo store
 }
 
 // NewHandler 🐄 – El creador de nuestro héroe manejador. Al parecer, hay alguien que necesita ser responsable
 // de las solicitudes de usuario, y este es el elegido. 🏆
 func NewHandler(store types.UserStore) *Handler {
-	return &Handler{store: store}
+	return &Handler{
+		store:     store,
+		userStore: store, // Usamos el mismo store
+	}
 }
 
 // RegisterRoutes 🐄 – El gran registrador de rutas. Aquí es donde se configuran las rutas para el manejo de
@@ -29,7 +33,7 @@ func NewHandler(store types.UserStore) *Handler {
 func (h *Handler) RegisterRoutes(router *mux.Router) {
 	router.HandleFunc("/login", h.handleLogin).Methods(http.MethodPost, http.MethodOptions)
 	router.HandleFunc("/register", h.handleRegister).Methods(http.MethodPost, http.MethodOptions)
-	router.HandleFunc("/users/{userApodo}", auth.WithJWTAuth(h.handleGetUser, h.store)).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc("/users/{userApodo}", auth.WithJWTAuth(h.handleGetUser, h.userStore)).Methods(http.MethodGet)
 }
 
 // handleLogin 🐄 – El mago del inicio de sesión. Aquí es donde intentamos iniciar sesión, verificar

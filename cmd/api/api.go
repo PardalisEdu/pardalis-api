@@ -5,6 +5,7 @@ package api
 // Porque sin una base de datos, ¿qué sería de nuestra vida?
 import (
 	"database/sql"
+	"gitlab.com/pardalis/pardalis-api/services/blog"
 	"log"
 	"net/http"
 	"time"
@@ -52,13 +53,16 @@ func (s *APIServer) Start() error {
 
 	// Iniciamos la tienda de usuarios, que no tiene nada que ver con Amazon. 🛒
 	userStore := user.NewStore(s.db)
+	blogStore := blog.NewBlogStore(s.db)
 	personalizationStore := personalization.NewStore(s.db)
 	// Creamos el handler para los usuarios. Este será quien maneje todas esas solicitudes incómodas de registro. 🙇‍♂️
 	userHandler := user.NewHandler(userStore)
+	blogHandler := blog.NewBlogHandler(blogStore, userStore)
 	personalizationHandler := personalization.NewHandler(personalizationStore, userStore)
 
 	// Registramos todas las rutas relacionadas con usuarios, para que el subrouter pueda manejarlas como el ninja que es. 🥷
 	userHandler.RegisterRoutes(subrouter)
+	blogHandler.RegisterRoutes(subrouter)
 	personalizationHandler.RegisterRoutes(subrouter)
 
 	// Configurar el servidor con CORS

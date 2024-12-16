@@ -29,3 +29,20 @@ func (u *User) ToResponse() UserResponse {
 		Correo: u.Correo,
 	}
 }
+
+type Blog struct {
+	ID               string    `json:"id"`
+	Titulo           string    `json:"titulo"`
+	Slug             string    `json:"slug"`
+	Contenido        string    `json:"contenido"`
+	Extracto         string    `json:"extracto"`
+	ImagenPortada    string    `json:"imagen_portada"`
+	FechaPublicacion time.Time `json:"fecha_publicacion"`
+	Estado           string    `json:"estado"`
+	Categoria        string    `json:"categoria"`
+	TiempoLectura    int       `json:"tiempo_lectura"`
+	AutorApodo       string    `json:"autor_apodo"`
+	MetaDescripcion  string    `json:"meta_descripcion"`
+	MetaKeywords     string    `json:"meta_keywords"`
+	Tags             []string  `json:"tags"`
+}

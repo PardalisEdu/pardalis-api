@@ -18,3 +18,28 @@ type LoginUserPayload struct {
 	Correo      string `json:"correo" validate:"required,email"` // Correo 🐄 – La dirección de correo electrónico que esperas que sea única, válida y recordada por todos los usuarios, porque es mucho pedir. 📧
 	Contrasenna string `json:"contrasenna" validate:"required"`  // Contrasenna 🐄 – La contraseña que has decidido que debe ser requerida, pero por suerte para los hackers, no tienes reglas de complejidad. 🔑
 }
+
+type CreateBlogPayload struct {
+	Titulo          string   `json:"titulo" validate:"required"`
+	Contenido       string   `json:"contenido" validate:"required"`
+	Extracto        string   `json:"extracto" validate:"required"`
+	ImagenPortada   string   `json:"imagen_portada"`
+	Categoria       string   `json:"categoria" validate:"required"`
+	TiempoLectura   int      `json:"tiempo_lectura" validate:"required,min=1"`
+	MetaDescripcion string   `json:"meta_descripcion"`
+	MetaKeywords    string   `json:"meta_keywords"`
+	Tags            []string `json:"tags"`
+}
+
+type UpdateBlogPayload struct {
+	Titulo          string   `json:"titulo"`
+	Contenido       string   `json:"contenido"`
+	Extracto        string   `json:"extracto"`
+	ImagenPortada   string   `json:"imagen_portada"`
+	Categoria       string   `json:"categoria"`
+	TiempoLectura   int      `json:"tiempo_lectura" validate:"min=1"`
+	Estado          string   `json:"estado" validate:"oneof=borrador publicado"`
+	MetaDescripcion string   `json:"meta_descripcion"`
+	MetaKeywords    string   `json:"meta_keywords"`
+	Tags            []string `json:"tags"`
+}

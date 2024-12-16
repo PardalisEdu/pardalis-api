@@ -92,14 +92,12 @@ func permissionDenied(w http.ResponseWriter) {
 	utils.WriteError(w, http.StatusForbidden, fmt.Errorf("permission denied")) // Envía un error de permiso denegado, porque no hay nada más que hacer en este punto. 🙅‍♂️
 }
 
-// GetuserApodoFromContext 🐄 – Obtiene el apodo del usuario del contexto, porque claramente necesitas saber eso en algún momento. 🤷‍♀️
-func GetuserApodoFromContext(ctx context.Context) int {
-	userApodo, ok := ctx.Value(UserKey).(int) // Extrae el apodo del usuario del contexto, porque eso es lo que has estado esperando. 🕵️‍♂️
-	if !ok {
-		return -1 // Retorna -1 si no encontró el apodo, porque eso siempre es una opción útil. 🚩
+// GetUserApodoFromContext 🐄 – Obtiene el apodo del usuario del contexto, porque claramente necesitas saber eso en algún momento. 🤷‍♀️
+func GetUserApodoFromContext(ctx context.Context) string {
+	if apodo, ok := ctx.Value(UserKey).(string); ok {
+		return apodo
 	}
-
-	return userApodo
+	return ""
 }
 
 // VerifyJWT 🐄 – Esta función es el detective que revisa si el token JWT es válido o no. Si es válido,
