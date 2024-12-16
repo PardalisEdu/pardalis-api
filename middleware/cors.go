@@ -77,7 +77,7 @@ func CORS(config *CorsConfig) func(http.Handler) http.Handler {
 
 func NewCorsMiddleware() *cors.Cors {
 	return cors.New(cors.Options{
-		AllowedOrigins: []string{"http://localhost:5173", "http://localhost:4173"}, // Orígenes permitidos
+		AllowedOrigins: []string{"http://localhost:5173", "http://localhost:4173", "http://localhost:3000"}, // Orígenes permitidos
 		AllowedMethods: []string{
 			http.MethodGet,
 			http.MethodPost,
